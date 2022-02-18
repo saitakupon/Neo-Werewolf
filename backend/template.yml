@@ -1,0 +1,334 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: >
+  Neo Werewolf backend template
+
+Globals:
+  Function:
+    Timeout: 900
+    MemorySize: 1024
+  Api:
+    EndpointConfiguration: 
+      Type: REGIONAL
+    Cors: "'*'"
+
+Resources:
+  # Lambda
+  CreatePlayerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: create-player
+      CodeUri: functions/create-player
+      Handler: create-player.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /player/{room_id}/{player_id}
+            Method: post
+            RestApiId: !Ref DevAPIGateway
+  CreateRoomFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: create-room
+      CodeUri: functions/create-room
+      Handler: create-room.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /room/{created_by}/{max_num}
+            Method: post
+            RestApiId: !Ref DevAPIGateway
+  CreateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: create-user
+      CodeUri: functions/create-user
+      Handler: create-user.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+  GetPlayerByPlayerIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: get-player-by-player-id
+      CodeUri: functions/get-player-by-player-id
+      Handler: get-player-by-player-id.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /player/by-player-id/{player_id}
+            Method: get
+            RestApiId: !Ref DevAPIGateway
+  GetPlayerByRoomIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: get-player-by-room-id
+      CodeUri: functions/get-player-by-room-id
+      Handler: get-player-by-room-id.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /player/by-room-id/{room_id}
+            Method: get
+            RestApiId: !Ref DevAPIGateway
+  GetResultFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: get-result
+      CodeUri: functions/get-result
+      Handler: get-result.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /result/{room_id}
+            Method: get
+            RestApiId: !Ref DevAPIGateway
+  GetRoleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: get-role
+      CodeUri: functions/get-role
+      Handler: get-role.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /role/{room_id}/{player_id}
+            Method: get
+            RestApiId: !Ref DevAPIGateway
+  GetRoomFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: get-room
+      CodeUri: functions/get-room
+      Handler: get-room.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /room/check/{room_id}
+            Method: get
+            RestApiId: !Ref DevAPIGateway
+  UpdateRoleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: update-role
+      CodeUri: functions/update-role
+      Handler: update-role.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /role/{room_id}/{player_id}/{card_num}/{current}
+            Method: get
+            RestApiId: !Ref DevAPIGateway
+  VotePlayerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: vote-player
+      CodeUri: functions/vote-player
+      Handler: vote-player.lambda_handler
+      Runtime: python3.9
+      Policies: AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        Handler:
+          Type: Api
+          Properties: 
+            Path: /player/vote/{player_id}/{room_id}
+            Method: get
+            RestApiId: !Ref DevAPIGateway
+  
+  # API Gateway
+  DevAPIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: neo-werewolf-api
+      StageName: dev
+  
+  # DynamoDB
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: uid
+          AttributeType: S
+      KeySchema:
+        - AttributeName: uid
+          KeyType: HASH
+      TableName: user
+      TableClass: STANDARD
+      BillingMode: PROVISIONED
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  RoomTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: roomId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: roomId
+          KeyType: HASH
+      TableName: room
+      TableClass: STANDARD
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  RoleTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: roleId
+          AttributeType: S
+        - AttributeName: cardNum
+          AttributeType: N
+        - AttributeName: owner
+          AttributeType: S
+      KeySchema:
+        - AttributeName: roleId
+          KeyType: HASH
+        - AttributeName: cardNum
+          KeyType: RANGE
+      TableName: role
+      TableClass: STANDARD
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      GlobalSecondaryIndexes:
+        - IndexName: owner-roleId-index
+          KeySchema:
+            - AttributeName: owner
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+  
+  PlayerTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: playerId
+          AttributeType: S
+        - AttributeName: room
+          AttributeType: S
+      KeySchema:
+        - AttributeName: playerId
+          KeyType: HASH
+      TableName: player
+      TableClass: STANDARD
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      GlobalSecondaryIndexes:
+        - IndexName: room-index
+          KeySchema:
+            - AttributeName: room
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+  
+  # Cognito
+  CognitoUserPool:
+        Type: "AWS::Cognito::UserPool"
+        Properties:
+            UserPoolName: neo-werewolf-user-pool
+            Policies: 
+                PasswordPolicy: 
+                    MinimumLength: 8
+                    RequireUppercase: false
+                    RequireLowercase: false
+                    RequireNumbers: false
+                    RequireSymbols: false
+                    TemporaryPasswordValidityDays: 7
+            LambdaConfig: 
+                PostConfirmation: !GetAtt CreateUserFunction.Arn
+            Schema: 
+              - Name: "sub"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: false
+                Required: true
+                StringAttributeConstraints: 
+                    MinLength: "1"
+                    MaxLength: "2048"
+              - Name: "email"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: true
+                StringAttributeConstraints: 
+                    MinLength: "1"
+                    MaxLength: "2048"
+            AutoVerifiedAttributes: 
+              - "email"
+            EmailVerificationMessage: "認証コード:{####}"
+            EmailVerificationSubject: "Neo Werewolf - 認証コード"
+            MfaConfiguration: "OFF"
+            EmailConfiguration: 
+                EmailSendingAccount: "COGNITO_DEFAULT"
+            AdminCreateUserConfig: 
+                AllowAdminCreateUserOnly: false
+            UsernameConfiguration: 
+                CaseSensitive: false
+            VerificationMessageTemplate: 
+                EmailMessage: "認証コード:{####}"
+                EmailSubject: "Neo Werewolf - 認証コード"
+                DefaultEmailOption: "CONFIRM_WITH_CODE"
+
+  CognitoUserPoolClient:
+      Type: "AWS::Cognito::UserPoolClient"
+      Properties:
+          UserPoolId: !Ref CognitoUserPool
+          ClientName: "neo-werewolf_app_client"
+          RefreshTokenValidity: 30
+          AllowedOAuthFlowsUserPoolClient: false
+          TokenValidityUnits: {}
+
+  CognitoUserPoolClientWeb:
+      Type: "AWS::Cognito::UserPoolClient"
+      Properties:
+          UserPoolId: !Ref CognitoUserPool
+          ClientName: "neo-werewolf_app_clientWeb"
+          RefreshTokenValidity: 30
+          AllowedOAuthFlowsUserPoolClient: false
+          TokenValidityUnits: {}
