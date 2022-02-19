@@ -7,7 +7,7 @@ def lambda_handler(event, context):
     table_name = 'user'
     input_dict = {
         'uid': {'S': event['request']['userAttributes']['sub']},
-        'name': {'S': event['username']}
+        'name': {'S': event['userName']}
     }
     dynamo_client.put_item(TableName=table_name, Item=input_dict)
 

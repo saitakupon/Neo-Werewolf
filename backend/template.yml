@@ -56,6 +56,13 @@ Resources:
       Runtime: python3.9
       Policies: AmazonDynamoDBFullAccess
       Tracing: Active
+  CreateUserPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt CreateUserFunction.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt CognitoUserPool.Arn
   GetPlayerByPlayerIdFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -283,14 +290,6 @@ Resources:
             LambdaConfig: 
                 PostConfirmation: !GetAtt CreateUserFunction.Arn
             Schema: 
-              - Name: "sub"
-                AttributeDataType: "String"
-                DeveloperOnlyAttribute: false
-                Mutable: false
-                Required: true
-                StringAttributeConstraints: 
-                    MinLength: "1"
-                    MaxLength: "2048"
               - Name: "email"
                 AttributeDataType: "String"
                 DeveloperOnlyAttribute: false
