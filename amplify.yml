@@ -16,6 +16,8 @@ applications:
         build:
           commands:
             - npm run build
+            - echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env
+            - echo "REACT_APP_STAGE=$REACT_APP_STAGE" >> .env
       artifacts:
         baseDirectory: build
         files:
