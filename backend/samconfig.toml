@@ -1,10 +1,22 @@
-version = 0.1
-[default]
-[default.deploy]
+version=0.1
+ [default.global.parameters]
+ stack_name = "neo-werewolf-backend"
+
+  [default.deploy]
 [default.deploy.parameters]
-stack_name = "neo-werewolf-backend-test"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1m81n0hmef4hy"
-s3_prefix = "neo-werewolf-backend-test"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ljqsxuid8q4u"
+ s3_prefix = "neo-werewolf-backend"
+region = "ap-northeast-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
+
+[neo-werewolf]
+[neo-werewolf.deploy]
+[neo-werewolf.deploy.parameters]
+ stack_name = "neo-werewolf-backend"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ljqsxuid8q4u"
+ s3_prefix = "neo-werewolf-backend"
 region = "ap-northeast-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
