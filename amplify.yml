@@ -4,8 +4,8 @@ applications:
       phases:
         build:
           commands:
-            - '# Execute Amplify CLI with the helper script'
-            - amplifyPush --simple
+            - chmod u+x ./amplifyCustomPush.sh
+            - ./amplifyCustomPush.sh
     frontend:
       phases:
         preBuild:
