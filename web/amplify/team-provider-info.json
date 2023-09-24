@@ -10,6 +10,16 @@
       "StackName": "amplify-neowerewolf-dev-200708",
       "StackId": "arn:aws:cloudformation:ap-northeast-1:852682819365:stack/amplify-neowerewolf-dev-200708/17b73800-9174-11ec-b655-0a3e84980d8f",
       "AmplifyAppId": "d281wgfcdmezx8"
+    },
+    "categories": {
+      "auth": {
+        "neowerewolf48a4c534": {
+          "userPoolId": "ap-northeast-1_tlz3v3LW4",
+          "userPoolName": "neo-werewolf-user-pool",
+          "webClientId": "6v4gc2uuebgo9mj6fdjmc44b4r",
+          "nativeClientId": "du9a48v6pje73g5jtg4egm0ul"
+        }
+      }
     }
   }
 }

@@ -2,7 +2,7 @@ version=0.1
  [default.global.parameters]
  stack_name = "neo-werewolf-backend"
 
-  [default.deploy]
+   [default.deploy]
 [default.deploy.parameters]
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ljqsxuid8q4u"
  s3_prefix = "neo-werewolf-backend"

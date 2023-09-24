@@ -1,1 +1,45 @@
-{}
+{
+  "auth": {
+    "neowerewolf48a4c534": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_neowerewolf48a4c534_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "neowerewolf48a4c534"
+        }
+      ]
+    },
+    "AMPLIFY_auth_neowerewolf48a4c534_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "neowerewolf48a4c534"
+        }
+      ]
+    },
+    "AMPLIFY_auth_neowerewolf48a4c534_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "neowerewolf48a4c534"
+        }
+      ]
+    },
+    "AMPLIFY_auth_neowerewolf48a4c534_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "neowerewolf48a4c534"
+        }
+      ]
+    }
+  }
+}

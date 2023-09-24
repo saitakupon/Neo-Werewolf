@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-neowerewolf-dev-151615-authRole",
+      "UnauthRoleArn": "arn:aws:iam::745013142364:role/amplify-neowerewolf-dev-151615-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::745013142364:role/amplify-neowerewolf-dev-151615-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-neowerewolf-dev-151615-deployment",
+      "UnauthRoleName": "amplify-neowerewolf-dev-151615-unauthRole",
+      "StackName": "amplify-neowerewolf-dev-151615",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:745013142364:stack/amplify-neowerewolf-dev-151615/9171d290-417c-11ee-9414-0eb9ce1b5711",
+      "AmplifyAppId": "d20lroo4gewduk"
+    }
+  }
+}
